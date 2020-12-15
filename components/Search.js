@@ -36,7 +36,7 @@ export default function Search({navigation, route}) {
   // fetch by main ingredient https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast 
   // list of ingredients
   const fetchByIngredient = () => {
-    let c = 'Carrot'
+    let c = text
     fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${c}`) // change this name to user input
     .then((response) => response.json())
     .then((json) => {
@@ -113,7 +113,9 @@ export default function Search({navigation, route}) {
       :
 
       <View>
-        <Button title="new search" onPress={() => setView(true)}/>
+        <View style={{marginTop: 20, marginBottom: 20}}>
+        <Button title="New search" onPress={() => setView(true)} buttonStyle={{backgroundColor: 'black'}}/>
+        </View>
         <FlatList
         style={{ flex: 1, backgroundColor: '#C94525',}}
         keyExtractor={(item, index) => index.toString()}

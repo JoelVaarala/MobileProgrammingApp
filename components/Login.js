@@ -23,7 +23,7 @@ const handleLogin = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Login page</Text>
+      <Text style={{marginBottom: 40, fontWeight: 'bold', fontSize: 20}}> Login </Text>
 
       <View>
         {error && <Text>{error}</Text>}
@@ -32,7 +32,7 @@ const handleLogin = () => {
       <View>
         <Text>Email</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'pink'}} 
+              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
               autoCapitalize="none"
               onChangeText={text => setEmail(text)}
               value={email}
@@ -43,7 +43,7 @@ const handleLogin = () => {
       <View style={{marginTop: 20}}>
         <Text>Password</Text>
         <TextInput 
-            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'pink'}} 
+            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
             autoCapitalize="none" 
             secureTextEntry
             onChangeText={text => setPassword(text)}
@@ -52,19 +52,17 @@ const handleLogin = () => {
         </TextInput>
       </View>
 
-      <TouchableOpacity style={{marginHorizontal: 30, paddingHorizontal: 10, backgroundColor: 'skyblue', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 10}} 
+      <TouchableOpacity style={{marginHorizontal: 30, paddingHorizontal: 10, backgroundColor: 'orange', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 10}} 
                         onPress={() => signIn(email, password)}>
         <Text>Sign in</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={{alignSelf: 'center', marginTop: 20}}>
         <Text style={{color: 'grey', fontSize: 13}}>
-          New to the app? <Text style={{ color: 'pink'}} onPress={() => navigation.navigate("Register")}>Sign up</Text> {/*here navigation to register page */}
+          New to the app? <Text style={{ color: 'orange'}} onPress={() => navigation.navigate("Register")}>Sign up</Text> 
         </Text>
       </TouchableOpacity>
 
-      <Button title="back" onPress={() => console.log(props.isLoggedIn)}/>
-    
       <StatusBar style="auto" />
     </View>
   );

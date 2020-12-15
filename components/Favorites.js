@@ -2,12 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { Button, Image, Icon } from 'react-native-elements';
+import { AuthContext } from '../AuthContext';
+import * as firebase from 'firebase';
 
 
-// Mobiilikurssin lopputyö
 export default function Favorites({navigation, route}) {
 
   var eee = ['item 1','item 2','item 4']
+  const { signOut } = React.useContext(AuthContext);
 
   React.useEffect(() => {
   
@@ -23,17 +25,17 @@ export default function Favorites({navigation, route}) {
   
   ) 
 
-// put flatlist component similar to 
+
   return (
    
   <FlatList ListHeaderComponent={
     <>
     <View style={{}}>
       <Text style={{marginTop: 30, marginBottom: 30}}></Text>
-    <ActivityIndicator color="red"/>
+    <ActivityIndicator color="black"/>
     
      
-     <Text> Tähän listataan favorites and probably own recipes (buttongroups?) and maybe some function to data to flatlist to which list to show... if() - return data  1 or 2  </Text>
+     <Text>  list favorites and probably own recipes (buttongroups?) and maybe some function to data to flatlist to which list to show... if() - return data  1 or 2  </Text>
      </View>
   
     </>}
@@ -60,15 +62,14 @@ export default function Favorites({navigation, route}) {
 
 
       <Icon
-        name="add"
+        name="visibility-off"
         size={20}
         color="black"
         reverse
         reverseColor="red"
-        onPress={() => console.log('moi')}
-        // replace log with " signOut() "
+        onPress={() => signOut()}
       />
-      
+      <Button title="log uid" onPress={() => console.log(firebase.auth().currentUser.uid)} />
       </View>
     }
   />

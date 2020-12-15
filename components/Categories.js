@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from '
 import { Avatar, Button, ListItem, Image } from 'react-native-elements';
 
 
-// Mobiilikurssin lopputyö
 export default function Categories({navigation, route}) {
 
   const [categories, setCategories] = React.useState([]);
@@ -29,17 +28,6 @@ export default function Categories({navigation, route}) {
 
   }
 
-  const renderITem = ({ item }) => (
-    <ListItem bottomDivider>
-      {/* <Avatar source={{uri: item.strCategoryThumb}}/> */}
-      <ListItem.Content>
-      <ListItem.Title>{item.strCategory}</ListItem.Title>
-      <ListItem.Subtitle>moi</ListItem.Subtitle>
-      </ListItem.Content>
-      <ListItem.Chevron/>
-    </ListItem>
-  )
-//height: tileSize, width: tileSize
   const renderI = ({ item }) => (
     <View style={{alignItems: 'center', backgroundColor: 'white', borderWidth: 0.5, borderColor: 'white', marginLeft: '6%', marginTop: '2%', borderRadius:15, overflow: 'hidden',  
     shadowColor: 'black', shadowOffset: {width: 0, height: 5}, shadowOpacity: 0.34, shadowRadius: 6.2, elevation: 10
@@ -57,7 +45,6 @@ export default function Categories({navigation, route}) {
   return (
     <View style={styles.container}>
       <Text style={{alignSelf: 'center', margin: 20, color: 'white', fontSize: 20, fontWeight: 'bold', backgroundColor: 'black', padding: 10, borderRadius: 15}}>Categories</Text>
-      {/* <Button title="go res" onPress={hoi} /> */}
       <FlatList
         style={styles.container}
         keyExtractor={(item, index) => index.toString()}

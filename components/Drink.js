@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Button, Icon, Avatar, Image } from 'react-native-elements';
+import { StyleSheet, Text, View, Dimensions, ActivityIndicator } from 'react-native';
+import { Button, Image } from 'react-native-elements';
 
 
 export default function Drink({navigation, route}) {
@@ -21,7 +21,6 @@ export default function Drink({navigation, route}) {
                      'http://clipart-library.com/images/pcqKknoc9.png'
                     }} 
         />
-        {/* <Icon color={'black'} size={28} name="casino" onPress={() => navigation.navigate("DrinkResult")}/> */}
         <Button title="ROLL" onPress={() => navigation.navigate("DrinkResult")} buttonStyle={{backgroundColor: 'black', marginTop: 20, marginLeft: 50, marginRight: 50}} />
      </View>
    </View>

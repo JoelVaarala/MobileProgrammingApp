@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Categories from './components/Categories';
 import Recipe from './components/Recipe';
 import Search from './components/Search';
@@ -12,8 +12,8 @@ import DrinkResult from './components/DrinkResult';
 import AddRecipe from './components/AddRecipe';
 import Login from './components/Login';
 import Register from './components/Register';
+import Loading from './components/Loading';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
 import { Icon } from 'react-native-elements';
@@ -21,7 +21,6 @@ import * as firebase from 'firebase';
 import { AuthContext } from "./AuthContext";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
-// createBottomTabNavigator(); // createMaterialTopTabNavigator();
 const Tab = createBottomTabNavigator()
 const ListStack = createStackNavigator();
 const ListStack2 = createStackNavigator();
@@ -229,13 +228,9 @@ export default function App(props) {
    
     );
   }
-
-
-
-      return<>{navigationChange.loading ?  <Text>Loading screen!</Text> : <AppStack /> }</>
-      
+      return<>{navigationChange.loading ? <Loading /> : <AppStack /> }</>   
 }
-//   <AuthStack/>    <AppStack/>   <Text>true</Text> <Text>false</Text>
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

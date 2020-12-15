@@ -1,25 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
-import * as firebase from 'firebase';
-import { useLinkProps } from '@react-navigation/native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 
-export default function Loading({navigation, route}, props) {
-
-
-    React.useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-           props.naviagtion.navigate(user ? "App" : "Auth") 
-        })
-    }, [])
-
+export default function Loading() {
 
     return(
         <View style={styles.container}>
-            <Text>
-                Loading
-            </Text>
-            <ActivityIndicator size="large" color="pink"/>
+            <View style={styles.Indicator}>
+            <ActivityIndicator size="large" color="black"/>
+            </View>
         </View>
     )
 }
@@ -29,12 +18,11 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#C94525',
-      paddingBottom: 10
-      //backgroundColor: 'whitesmoke'
-      //maxWidth: '50%'
+      paddingBottom: 10,
+      alignItems: 'center',
+      flexDirection: 'row' 
     },
-    row: {
-      flex: 1,
-      justifyContent: "space-around"
+    Indicator: {
+        marginLeft: '45%'
     }
   });

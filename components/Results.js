@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from '
 import { Avatar, Button, ListItem, Image } from 'react-native-elements';
 
 
-// Mobiilikurssin lopputyö
 export default function Results({navigation, route}) {
 
   const [results, setResults] = React.useState([]);
@@ -32,17 +31,6 @@ export default function Results({navigation, route}) {
 
   }
 
-  const renderITem = ({ item }) => (
-    <ListItem bottomDivider>
-      {/* <Avatar source={{uri: item.strCategoryThumb}}/> */}
-      <ListItem.Content>
-      <ListItem.Title>{item.strCategory}</ListItem.Title>
-      <ListItem.Subtitle>moi</ListItem.Subtitle>
-      </ListItem.Content>
-      <ListItem.Chevron/>
-    </ListItem>
-  )
-//height: tileSize, width: tileSize
   const renderI = ({ item }) => (
     <View style={{alignItems: 'center', backgroundColor: 'white', borderWidth: 0.5, borderColor: 'white', marginLeft: '6%', marginTop: '2%', borderRadius:15, overflow: 'hidden',  
     shadowColor: 'black', shadowOffset: {width: 0, height: 5}, shadowOpacity: 0.34, shadowRadius: 6.2, elevation: 10, 
@@ -68,7 +56,6 @@ export default function Results({navigation, route}) {
         renderItem={renderI}
       />
    
-      {/* <Button title="log" onPress={() => console.log(categories)}/> */}
        <StatusBar hidden={true} /> 
     </View>
   );

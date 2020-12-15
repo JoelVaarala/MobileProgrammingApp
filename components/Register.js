@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
+import {AuthContext} from '../AuthContext';
 
 export default function Register({navigation, route} , props) {
 
@@ -9,24 +11,41 @@ export default function Register({navigation, route} , props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState(null);
+  const { signIn } = React.useContext(AuthContext);
+  var db = firebase.firestore()
 
-
-const handleSignUp = () => {
-  firebase
-  .auth()
-  .createUserWithEmailAndPassword(email, password)
-  .then(userCredentials => {
-      return userCredentials.user.updateProfile({
+  const handleSignUp = () => {
+    firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(userCredentials => {
+        return db.collection('users').doc(userCredentials.user.uid).set({
           displayName: name
-      })
-  })
-  .catch(error => setError(error.message))
-}
+        })
+    })
+    .then(() => signIn(email, password))
+    .catch(error => setError(error.message))
+  }
+
+
+
+
+// const handleSignUp = () => {
+//   firebase
+//   .auth()
+//   .createUserWithEmailAndPassword(email, password)
+//   .then(userCredentials => {
+//       return userCredentials.user.updateProfile({
+//           displayName: name
+//       })
+//   })
+//   .catch(error => setError(error.message))
+// }
 
 
   return (
     <View style={styles.container}>
-      <Text>Sign up page</Text>
+      <Text style={{marginBottom: 40, fontWeight: 'bold', fontSize: 20}}> Register </Text>
 
       <View>
         {error && <Text>{error}</Text>}
@@ -35,7 +54,7 @@ const handleSignUp = () => {
       <View>
         <Text>Name</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'pink'}} 
+              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
               autoCapitalize="none"
               onChangeText={text => setName(text)}
               value={name}
@@ -43,10 +62,10 @@ const handleSignUp = () => {
         </TextInput>
       </View>
 
-      <View>
+      <View style={{marginTop: 20}}>
         <Text>Email</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'pink'}} 
+              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
               autoCapitalize="none"
               onChangeText={text => setEmail(text)}
               value={email}
@@ -57,7 +76,7 @@ const handleSignUp = () => {
       <View style={{marginTop: 20}}>
         <Text>Password</Text>
         <TextInput 
-            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'pink'}} 
+            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
             autoCapitalize="none" 
             secureTextEntry
             onChangeText={text => setPassword(text)}
@@ -66,13 +85,13 @@ const handleSignUp = () => {
         </TextInput>
       </View>
 
-      <TouchableOpacity style={{marginHorizontal: 30, backgroundColor: 'blue', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center'}} onPress={handleSignUp}>
+      <TouchableOpacity style={{marginHorizontal: 30, paddingHorizontal: 10, backgroundColor: 'orange', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 10}} onPress={handleSignUp}>
         <Text>Sign up</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={{alignSelf: 'center', marginTop: 20}}>
         <Text style={{color: 'grey', fontSize: 13}}>
-          New to the app? <Text style={{ color: 'pink'}} onPress={() => navigation.pop()}>Sign in</Text>
+          Already have user? <Text style={{ color: 'orange'}} onPress={() => navigation.pop()}>Sign in</Text>
         </Text>
       </TouchableOpacity>
     
