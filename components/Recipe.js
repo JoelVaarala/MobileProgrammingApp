@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View, Dimensions, FlatList, ActivityIndicator } from 'react-native';
-import {Image, Button, Tooltip, ListItem} from 'react-native-elements';
+import {Image, Button, Tooltip, ListItem, Icon} from 'react-native-elements';
 import ReadMore from 'react-native-read-more-text';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+
 
 
 export default function Recipe({navigation, route}) {
@@ -17,6 +20,7 @@ export default function Recipe({navigation, route}) {
   });
   const [recipeObj, setRecipeObj] = React.useState();
   const [dataFetched, setDataFetched] = React.useState(false);
+  const [like, setLike] = React.useState("favorite-border");
 
   React.useEffect(() => {
     console.log('route statement for di dish ',route.params.dish)
@@ -211,6 +215,25 @@ let i = 1;
 
   )
 
+  const handleFavorite = () => {
+    let id =  firebase.auth().currentUser.uid
+    let title = recipe.title
+    if(like == "favorite-border"){
+      console.log(recipe.title)
+      setLike("favorite")
+      // save to firebase
+      
+      let data = { ref: `https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe.title}` }
+
+     firebase.firestore().collection('users').doc(id).collection('MyFavorited').doc(title).set(data)
+    }
+    else if(like == "favorite"){
+      console.log("dislike")
+      setLike("favorite-border")
+      // delete from firebase
+      // firebase.firestore().collection('users').doc(id).collection('MyDrinks').where("ref")
+    }
+  }
 
   // return (
   //   <ScrollView style={{width: screenWidth*0.9, marginLeft: screenWidth*0.05, marginTop: 20, backgroundColor: 'orange'}}>
@@ -251,6 +274,16 @@ let i = 1;
   return(
     <FlatList ListHeaderComponent={
       <>
+      <View style={{alignItems: 'flex-end'}}>
+       <Icon
+        name={like}
+        size={15}
+        color="white"
+        reverse
+        reverseColor="red"
+        onPress={handleFavorite}
+      />
+      </View>
       <View style={{alignItems: 'center', backgroundColor: 'whitesmoke', marginBottom: 10, alignSelf: 'center', marginTop: 20, paddingLeft: 10, paddingRight: 10, 
                     shadowColor: 'black', shadowOffset: {width: 2, height: 8}, shadowOpacity: 0.9, shadowRadius: 10.32, elevation: 16}}>
        <Image source={{uri: recipe.avatarUrl}} PlaceholderContent={<ActivityIndicator color="red"/>} style={{ width: screenWidth*0.5, height: screenWidth*0.5, marginTop: 20, borderColor: 'grey', borderWidth: 0}}/>
