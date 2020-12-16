@@ -13,17 +13,10 @@ export default function Login({navigation, route} , props) {
   const [user, setUser] = React.useState("");
   const { signIn } = React.useContext(AuthContext);
 
-const handleLogin = () => {
-  firebase
-  .auth()
-  .signInWithEmailAndPassword(email, password)
-  .catch(error => setError(error.message))
-}
-
 
   return (
     <View style={styles.container}>
-      <Text style={{marginBottom: 40, fontWeight: 'bold', fontSize: 20}}> Login </Text>
+      <Text style={styles.title}> Login </Text>
 
       <View>
         {error && <Text>{error}</Text>}
@@ -32,7 +25,7 @@ const handleLogin = () => {
       <View>
         <Text>Email</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
+              style={styles.input} 
               autoCapitalize="none"
               onChangeText={text => setEmail(text)}
               value={email}
@@ -43,7 +36,7 @@ const handleLogin = () => {
       <View style={{marginTop: 20}}>
         <Text>Password</Text>
         <TextInput 
-            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
+            style={styles.input} 
             autoCapitalize="none" 
             secureTextEntry
             onChangeText={text => setPassword(text)}
@@ -52,7 +45,7 @@ const handleLogin = () => {
         </TextInput>
       </View>
 
-      <TouchableOpacity style={{marginHorizontal: 30, paddingHorizontal: 10, backgroundColor: 'orange', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 10}} 
+      <TouchableOpacity style={styles.signIn} 
                         onPress={() => signIn(email, password)}>
         <Text>Sign in</Text>
       </TouchableOpacity>
@@ -75,4 +68,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  signIn: {
+    marginHorizontal: 30, 
+    paddingHorizontal: 10, 
+    backgroundColor: 'orange', 
+    borderRadius: 4, 
+    height: 50, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginTop: 10
+  },
+  input: {
+    borderBottomColor: 'black', 
+    borderBottomWidth: StyleSheet.hairlineWidth, 
+    height: 40, 
+    fontSize: 15, 
+    color: 'orange', 
+    width: 150
+  },
+  title: {
+    marginBottom: 40, 
+    fontWeight: 'bold', 
+    fontSize: 20
+  }
 });

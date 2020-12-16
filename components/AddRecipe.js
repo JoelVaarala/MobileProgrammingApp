@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { Button, Image, Icon, Input } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
@@ -7,7 +7,6 @@ import 'firebase/firestore';
 
 export default function AddRecipe({navigation, route}){
 
-    const [text, setText] = React.useState();
     const [ingredient, setIngredient] = React.useState("");
     const [amount, setAmount] = React.useState("");
     const [ingredients, setIngredients] = React.useState([]);
@@ -18,25 +17,22 @@ export default function AddRecipe({navigation, route}){
         instructions: "",
     })
 
+    // updates recipe state
     const inputChanged = (inputName, inputValue) => {
         setRecipe({ ...recipe, [inputName]: inputValue });
       }
 
+    // adds "line" of ingredient + amount
     const addLine = () => {
-        setIngredients([{key: ingredient}, ...ingredients])
-        setAmounts([{key: amount}, ...amounts])
+        setIngredients([...ingredients, ingredient])
+        setAmounts([...amounts, amount])
         setIngredient("");
         setAmount("");
     }
 
-    React.useEffect(() => {
-        console.log('moi')
-    },[])
-
-
+    // makes obj of inputs and posts to firebase
     const sendToFirebase = () => {
-       let c =  firebase.auth().currentUser.uid
-        console.log(c)
+       let id =  firebase.auth().currentUser.uid
         let data = {
             title: recipe.name,
             instructions: recipe.instructions,
@@ -44,50 +40,49 @@ export default function AddRecipe({navigation, route}){
             amounts: amounts
         }
 
-     firebase.firestore().collection('users').doc(c).collection('MyRecipes').doc().set(data)
-       
+     firebase.firestore().collection('users').doc(id).collection('MyRecipes').doc(recipe.name).set(data)
+       setAmounts([])
+       setIngredients([])
+       setRecipe({name: "", instructions: ""})
     }
 
     return( 
         <ScrollView>
-        <View style={{flex: 1, backgroundColor: '#C94525'}}>
-            <Text style={{margin: 20, alignSelf: 'center', fontSize: 20, fontWeight: 'bold'}}>
+        <View style={styles.container}>
+            <Text style={styles.title}>
                 Your recipe 
             </Text>
            
 
-            <Text style={{marginLeft: '3%'}}>Name of the dish</Text>
+            <Text style={styles.title2}>Name of the dish</Text>
             <Input
                 placeholder='type here'
-                //containerStyle={{backgroundColor: 'lightgreen', paddingTop: 10}}
-                inputContainerStyle={{backgroundColor: 'whitesmoke', borderColor: 'black', borderRadius: 15, borderWidth: 1, width: '75%',}}
+                inputContainerStyle={styles.input}
                 inputStyle={{color: 'black'}}
                 onChangeText={(text) => inputChanged("name", text)}
                 value={recipe.name}
                 />
 
-            <Text style={{marginLeft: '3%'}}>Ingredient</Text>
+            <Text style={styles.title2}>Ingredient</Text>
             <Input
                 placeholder='type here'
-                //containerStyle={{backgroundColor: 'lightgreen', paddingTop: 10}}
-                inputContainerStyle={{backgroundColor: 'whitesmoke', borderColor: 'black', borderRadius: 15, borderWidth: 1, width: '50%', }}
+                inputContainerStyle={styles.input}
                 inputStyle={{color: 'black'}}
                 onChangeText={(text) => setIngredient(text)}
                 value={ingredient}
                 />
-            <View style={{}}>
-            <Text style={{marginLeft: '3%'}}>amount</Text>
+            <View>
+            <Text style={styles.title2}>amount</Text>
                 <Input
                 placeholder='type here'
-                //containerStyle={{backgroundColor: 'lightgreen', paddingTop: 10}}
-                inputContainerStyle={{backgroundColor: 'whitesmoke', borderColor: 'black', borderRadius: 15, borderWidth: 1, width: '50%', }}
+                inputContainerStyle={styles.input}
                 inputStyle={{color: 'black'}}
                 onChangeText={(text) => setAmount(text)}
                 value={amount}
                 />
                 <Button 
                 title="add "
-                buttonStyle={{marginTop: 20, backgroundColor: 'black', width: '20%', borderRadius: 15, marginLeft: '3%' , marginTop: 0}}
+                buttonStyle={styles.add}
                 onPress={addLine} 
                 icon={
                     <Icon
@@ -99,24 +94,61 @@ export default function AddRecipe({navigation, route}){
                 iconRight  
                 />
             </View>
-            <Text style={{marginLeft: '3%', marginTop: 10}}>instructions</Text>
+            <Text style={styles.title2}>instructions</Text>
             <Input
                 placeholder='type here'
-                //containerStyle={{backgroundColor: 'lightgreen', paddingTop: 10}}
-                inputContainerStyle={{backgroundColor: 'whitesmoke', borderColor: 'black', borderRadius: 15, borderWidth: 1, width: '75%',}}
+                inputContainerStyle={styles.input}
                 inputStyle={{color: 'black'}}
                 onChangeText={(text) => inputChanged("instructions", text)}
                 value={recipe.instructions}
                 multiline={true}
                 />
 
-            <Text style={{marginLeft: '3%'}}>photo</Text>
+            <Text style={styles.title2}>photo</Text>
             <ActivityIndicator color="black"/>
             <Text style={{marginBottom: 40}}></Text>
-            <Button title="hoi" onPress={() => console.log(recipe, amounts[1], ingredients[1])}/>
-            <Button title="send" onPress={sendToFirebase}/>
+           
+            <Button title="save" onPress={sendToFirebase} buttonStyle={styles.button}/>
             
         </View>
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: '#C94525'
+    },
+    title: {
+        margin: 20,
+        alignSelf: 'center', 
+        fontSize: 20, 
+        fontWeight: 'bold'
+    },
+    title2: {
+        marginLeft: '3%', 
+        fontWeight: 'bold'
+    },
+    input: {
+        backgroundColor: 'whitesmoke', 
+        borderColor: 'black',
+        borderRadius: 15, 
+        borderWidth: 1, 
+        width: '75%'
+    },
+    button: {
+        backgroundColor: 'black', 
+        marginBottom: 20, 
+        width: '50%', 
+        alignSelf: 'center'
+    },
+    add: {
+        marginTop: 20, 
+        backgroundColor: 'black', 
+        width: '20%', 
+        borderRadius: 15, 
+        marginLeft: '3%' , 
+        marginTop: 0
+    }
+  });

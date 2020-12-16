@@ -28,24 +28,9 @@ export default function Register({navigation, route} , props) {
   }
 
 
-
-
-// const handleSignUp = () => {
-//   firebase
-//   .auth()
-//   .createUserWithEmailAndPassword(email, password)
-//   .then(userCredentials => {
-//       return userCredentials.user.updateProfile({
-//           displayName: name
-//       })
-//   })
-//   .catch(error => setError(error.message))
-// }
-
-
   return (
     <View style={styles.container}>
-      <Text style={{marginBottom: 40, fontWeight: 'bold', fontSize: 20}}> Register </Text>
+      <Text style={styles.title}> Register </Text>
 
       <View>
         {error && <Text>{error}</Text>}
@@ -54,7 +39,7 @@ export default function Register({navigation, route} , props) {
       <View>
         <Text>Name</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
+              style={styles.input} 
               autoCapitalize="none"
               onChangeText={text => setName(text)}
               value={name}
@@ -65,7 +50,7 @@ export default function Register({navigation, route} , props) {
       <View style={{marginTop: 20}}>
         <Text>Email</Text>
         <TextInput 
-              style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
+              style={styles.input} 
               autoCapitalize="none"
               onChangeText={text => setEmail(text)}
               value={email}
@@ -76,7 +61,7 @@ export default function Register({navigation, route} , props) {
       <View style={{marginTop: 20}}>
         <Text>Password</Text>
         <TextInput 
-            style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth, height: 40, fontSize: 15, color: 'orange', width: 150}} 
+            style={styles.input} 
             autoCapitalize="none" 
             secureTextEntry
             onChangeText={text => setPassword(text)}
@@ -85,7 +70,7 @@ export default function Register({navigation, route} , props) {
         </TextInput>
       </View>
 
-      <TouchableOpacity style={{marginHorizontal: 30, paddingHorizontal: 10, backgroundColor: 'orange', borderRadius: 4, height: 50, alignItems: 'center', justifyContent: 'center', marginTop: 10}} onPress={handleSignUp}>
+      <TouchableOpacity style={styles.signUp} onPress={handleSignUp}>
         <Text>Sign up</Text>
       </TouchableOpacity>
 
@@ -107,4 +92,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  signUp: {
+    marginHorizontal: 30, 
+    paddingHorizontal: 10, 
+    backgroundColor: 'orange', 
+    borderRadius: 4, 
+    height: 50, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginTop: 10
+  },
+  input: {
+    borderBottomColor: 'black', 
+    borderBottomWidth: StyleSheet.hairlineWidth, 
+    height: 40, 
+    fontSize: 15, 
+    color: 'orange', 
+    width: 150
+  },
+  title: {
+    marginBottom: 40, 
+    fontWeight: 'bold', 
+    fontSize: 20
+  }
 });

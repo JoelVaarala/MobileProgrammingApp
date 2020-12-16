@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { LogBox } from 'react-native';
 import Categories from './components/Categories';
 import Recipe from './components/Recipe';
 import Search from './components/Search';
@@ -20,56 +20,42 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Icon } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { AuthContext } from "./AuthContext";
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator()
 const ListStack = createStackNavigator();
 const ListStack2 = createStackNavigator();
 
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBxYoRvOs7ayJoxXcjkhyp8XLmU4bSL8iM",
-  authDomain: "foodndrink-e6980.firebaseapp.com",
-  projectId: "foodndrink-e6980",
-  storageBucket: "foodndrink-e6980.appspot.com",
-  messagingSenderId: "310823273869",
-  appId: "1:310823273869:web:6388e2412d764f997929c4"
-};
-// Initialize Firebase
-//firebase.initializeApp(firebaseConfig);
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+ var firebaseConfig = {
+   apiKey: "AIzaSyBxYoRvOs7ayJoxXcjkhyp8XLmU4bSL8iM",
+   authDomain: "foodndrink-e6980.firebaseapp.com",
+   projectId: "foodndrink-e6980",
+   storageBucket: "foodndrink-e6980.appspot.com",
+   messagingSenderId: "310823273869",
+   appId: "1:310823273869:web:6388e2412d764f997929c4"
+ };
 
+ if (firebase.apps.length === 0) {
+   firebase.initializeApp(firebaseConfig);
+ }
+
+ LogBox.ignoreLogs(['']);
 
 export default function App(props) {
 
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  // const [user, setUser] = useState();
-
-  // function onAuthStateChanged(user) {
-  //   setUser(user);
-  //   if (initializing) setInitializing(false);
-  // }
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-
-  // ------------------
    // If loading is true, loadingscreen will be displayed. If loggedIn is true, apps content will be displayed, else login page will be displayed
    const [navigationChange, setNavigationChange] = React.useState({ loading: true, loggedIn: false });
    // key for AsyncStorage
    const emailKey = 'email';
    const passwordKey = 'password';
  
-   //Tämä hoitaa kirjautumisen ja initializen appii, kutsutaan vain kerran ja tässä.
+   // calls function to check async storage
    React.useEffect(() => {
      loginOnStartup();
    }, []);
  
-   //Tämä contexti hallinnoi sisäänkirjautumisflowta
+   // Authcontext holds logic for signIn and out
    const authContext = React.useMemo(
      () => ({
        // attempts to sign in with login info and saves them to AsyncStorage if sign in was successful
@@ -96,10 +82,11 @@ export default function App(props) {
      []
    );
  
+   // checks async storage for previous login, if no -> login
    const loginOnStartup = async () => {
      let email = await AsyncStorage.getItem(emailKey);
      let password = await AsyncStorage.getItem(passwordKey);
-     console.log("EMAIL # PASS" , email, password)
+     console.log("EMAIL " , email, " # " , password)
      if (email != null && password != null) {
        authContext.signIn(email, password);
      } else {
@@ -114,18 +101,16 @@ export default function App(props) {
        .signInWithEmailAndPassword(kayttaja, salasana)
        .catch(function (err) {
          error = err.code;
-         console.log('THIS erre', error);
-         console.log('no.2', err);
+         console.log(error);
        });
        if (error === 'auth/user-not-found' || error === 'auth/wrong-password') {
         return 'Wrong email or password';
     }
     return 'Success';
-   };
-  // ------------------
- 
+   }; 
 
 
+  // Create stacks
   const categoryStack = () => {
     return (
       <ListStack.Navigator>
@@ -234,15 +219,6 @@ export default function App(props) {
   }
       return<>{navigationChange.loading ? <Loading /> : <AppStack /> }</>   
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 global.myTheme = {
   dark: true,

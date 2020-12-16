@@ -8,12 +8,10 @@ export default function Drink({navigation, route}) {
 
   const screenWidth = Dimensions.get('window').width;
 
-  // Here maybe is possible use expo component to shake the phone which triggers navi + fetch
-
   return (
    <View style={styles.container}>
      <View style={{backgroundColor: '#C94525'}}>  
-      <Text style={{fontSize: 25, fontWeight: 'bold', alignSelf: 'center'}}>Cocktail dices</Text> 
+      <Text style={styles.title}>Cocktail dices</Text> 
         <Image 
             style={{alignSelf: 'center', width: screenWidth*0.8, height: screenWidth*0.5, marginTop: 10}}
             PlaceholderContent={<ActivityIndicator color="red"/>}
@@ -21,7 +19,11 @@ export default function Drink({navigation, route}) {
                      'http://clipart-library.com/images/pcqKknoc9.png'
                     }} 
         />
-        <Button title="ROLL" onPress={() => navigation.navigate("DrinkResult", { drinkUrl : `https://www.thecocktaildb.com/api/json/v1/1/random.php` })} buttonStyle={{backgroundColor: 'black', marginTop: 20, marginLeft: 50, marginRight: 50}} />
+        <Button 
+          title="ROLL" 
+          onPress={() => navigation.navigate("DrinkResult", { drinkUrl : `https://www.thecocktaildb.com/api/json/v1/1/random.php` })} 
+          buttonStyle={styles.button} 
+        />
      </View>
    </View>
   );
@@ -34,4 +36,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  title: {
+    fontSize: 25, 
+    fontWeight: 'bold', 
+    alignSelf: 'center'
+  },
+  button: {
+    backgroundColor: 'black', 
+    marginTop: 20, 
+    marginLeft: 50, 
+    marginRight: 50
+  }
 });

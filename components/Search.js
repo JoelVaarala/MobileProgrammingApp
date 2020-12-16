@@ -33,24 +33,21 @@ export default function Search({navigation, route}) {
   }, [view])
  
 
-  // fetch by main ingredient https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast 
-  // list of ingredients
   const fetchByIngredient = () => {
-    let c = text
-    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${c}`) // change this name to user input
+    let input = text
+    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${input}`)
     .then((response) => response.json())
     .then((json) => {
       setRes(json.meals)
-      console.log(' _____-------_____',json.meals)
     })
     .catch((error) => console.log(error))
-
   }
 
+  // Checks if trigger search for list or navigate to show desired meal recipe
   const navi = () => {
-    var i = text;
+    var input = text;
     if(activeButton == 0){
-      navigation.navigate("Recipe", { dish : i })
+      navigation.navigate("Recipe", { dish : input })
     }
     else if(activeButton == 1){
       fetchByIngredient();
@@ -59,11 +56,8 @@ export default function Search({navigation, route}) {
     setText("")
   }
 
-// navigation.navigate("Recipe", { dish : item.strMeal })
   const renderI = ({ item }) => (
-    <View style={{alignItems: 'center', backgroundColor: 'white', borderWidth: 0.5, borderColor: 'white', marginLeft: '6%', marginTop: '2%', borderRadius:15, overflow: 'hidden',  
-    shadowColor: 'black', shadowOffset: {width: 0, height: 5}, shadowOpacity: 0.34, shadowRadius: 6.2, elevation: 10, 
-    }}>
+    <View style={styles.RenderItemView}>
     <TouchableOpacity onPress={() => navigation.navigate("Recipe", { dish : item.strMeal })}>
     <Avatar source={{uri: item.strMealThumb}} style={{ height: tileSize2, width: tileSize1, paddingRight: 0 }} />
     </TouchableOpacity>
@@ -75,27 +69,25 @@ export default function Search({navigation, route}) {
   return (
     <View style={styles.container}>
       {
-        view ?  // if true 1 : false 2
+        view ? 
       <View>
-      <Text style={{fontSize: 30, fontWeight: 'bold', color: 'black', fontStyle: 'italic'}}>Search by : </Text>
+      <Text style={styles.searchHeader}>Search by : </Text>
 
       <ButtonGroup
-      buttonStyle={{backgroundColor: 'black', borderColor: 'black', color: 'black', borderWidth: 3}}
+      buttonStyle={styles.BGbutton}
       selectedButtonStyle={{backgroundColor: 'black'}}
-      selectedTextStyle={{color: 'whitesmoke', fontWeight: 'bold', fontSize: 15}}
+      selectedTextStyle={styles.BGselectedText}
       buttonContainerStyle={{borderColor: 'black', }}
       onPress={updateIndex}
       selectedIndex={activeButton}
       buttons={buttons}
-      containerStyle={{height: 30, borderColor: 'black'}}
+      containerStyle={styles.BGcontainer}
       />
-    
-    
 
       <Input
         placeholder='type here'
         //containerStyle={{backgroundColor: 'lightgreen', paddingTop: 10}}
-        inputContainerStyle={{backgroundColor: 'whitesmoke', borderColor: 'black', borderRadius: 15, borderWidth: 1, width: '75%', alignSelf: 'center'}}
+        inputContainerStyle={styles.input}
         inputStyle={{color: 'black'}}
         onChangeText={(text) => setText(text)}
         value={text}
@@ -107,29 +99,24 @@ export default function Search({navigation, route}) {
           />
           }
       />
-      <Button title="Search" onPress={navi} buttonStyle={{backgroundColor: 'black', borderWidth: 2, borderColor: 'black', width: '35%', alignSelf: 'center' }} />
+      <Button title="Search" onPress={navi} buttonStyle={styles.buttonStyle} />
       
       </View>
       :
-
       <View>
         <View style={{marginTop: 20, marginBottom: 20}}>
         <Button title="New search" onPress={() => setView(true)} buttonStyle={{backgroundColor: 'black'}}/>
         </View>
         <FlatList
-        style={{ flex: 1, backgroundColor: '#C94525',}}
+        style={styles.flatlist}
         keyExtractor={(item, index) => index.toString()}
         data={res}
         numColumns={2}
-        //columnWrapperStyle={styles.row}
-        //renderItem={renderITem}
         renderItem={renderI}
       />
       </View>
-     
-        }
-    
-      {/* <StatusBar style="auto" /> */}
+      }
+
     </View>
   );
 }
@@ -142,4 +129,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  RenderItemView: {
+    alignItems: 'center', 
+    backgroundColor: 'white', 
+    borderWidth: 0.5, 
+    borderColor: 'white', 
+    marginLeft: '6%', 
+    marginTop: '2%', 
+    borderRadius:15, 
+    overflow: 'hidden',  
+    shadowColor: 'black', 
+    shadowOffset: {width: 0, height: 5}, shadowOpacity: 0.34, shadowRadius: 6.2, elevation: 10
+  },
+  searchHeader: {
+    fontSize: 30, 
+    fontWeight: 'bold', 
+    color: 'black', 
+    fontStyle: 'italic'
+  },
+  buttonStyle: {
+    backgroundColor: 'black', 
+    borderWidth: 2, 
+    borderColor: 'black', 
+    width: '35%', 
+    alignSelf: 'center'
+  },
+  input: {
+    backgroundColor: 'whitesmoke', 
+    borderColor: 'black', 
+    borderRadius: 15, 
+    borderWidth: 1, 
+    width: '75%', 
+    alignSelf: 'center'
+  },
+  BGselectedText: {
+    color: 'whitesmoke', 
+    fontWeight: 'bold', 
+    fontSize: 15
+  },
+  BGbutton: {
+    backgroundColor: 'black', 
+    borderColor: 'black', 
+    color: 'black', 
+    borderWidth: 3
+  },
+  BGcontainer: {
+    height: 30, 
+    borderColor: 'black'
+  },
+  flatlist: {
+    flex: 1, 
+    backgroundColor: '#C94525'
+  }
+  
 });

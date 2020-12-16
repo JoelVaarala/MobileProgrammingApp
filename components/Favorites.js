@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Button, Image, Icon, ButtonGroup } from 'react-native-elements';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Button, Icon, ButtonGroup } from 'react-native-elements';
 import { AuthContext } from '../AuthContext';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -9,24 +9,25 @@ import 'firebase/firestore';
 
 export default function Favorites({navigation, route}) {
 
-  var eee = [{ref: "123", title: "123"},{ref: "123", title: "123"},{ref: "123", title: "123"}]
-  var aaa = [{ref: "12300", title: "000"},{ref: "1230", title: "1203"},{ref: "10023", title: "12300"}]
-  var ooo = [{ref: "1", title: "1"},{ref: "1", title: "1"},{ref: "1", title: "1"}]
-
   const [drinks, setDrinks] = React.useState([]);
   const [ownRecipes, setOwnRecipes] = React.useState([]);
   const [likedRecipes, setLikedRecipes] = React.useState([]); 
-
   const [activeButton, setActiveButton] = React.useState();
   const [list, setList] = React.useState([]);
   
   const { signOut } = React.useContext(AuthContext);
 
   React.useEffect(() => {
+    getContents();
+  }, []);
+
+  // fetch saved recipes from firebase
+  const getContents = () => {
     var drink = [];
     var ownRecipe = [];
     var likedRecipe = [];
-    let id = firebase.auth().currentUser.uid;
+    let id =  firebase.auth().currentUser.uid;
+
     firebase.firestore()
     .collection('users')
     .doc(id).collection('MyDrinks')
@@ -62,8 +63,9 @@ export default function Favorites({navigation, route}) {
     });
 
     setOwnRecipes(ownRecipe)
-  }, []);
+  }
 
+  // updates buttongroup index
   const updateIndex = (selectedIndex) => {
     setActiveButton(selectedIndex)
     if(selectedIndex == 0){
@@ -75,10 +77,11 @@ export default function Favorites({navigation, route}) {
    }
   }
 
+  // selects where to navigate depending whhat category is selected
   const navi = (item) => {
     if(activeButton == 0){
       console.log('0 valittuna', item)
-      navigation.navigate("MyRecipe")
+      navigation.navigate("MyRecipe", {recipeItem: item})
     }else if(activeButton == 1){
       navigation.navigate("Recipe", { dish : item })
     }else if(activeButton == 2){
@@ -91,8 +94,7 @@ export default function Favorites({navigation, route}) {
   const renderI = ({ item }) => (
    
     <TouchableOpacity 
-      style={{backgroundColor: 'whitesmoke', width: '80%', alignSelf: 'center', padding: 8, borderRadius: 5, marginBottom: 2}}
-      //onPress={() => console.log(item.ref)}
+      style={styles.items}
       onPress={() => navi(item.title)}
     >
       <View style={{flexDirection: 'row'}}>
@@ -117,9 +119,9 @@ export default function Favorites({navigation, route}) {
     <View style={{}}>
       <Text style={{marginTop: 10, marginBottom: 30}}></Text>
       <ButtonGroup
-      buttonStyle={{backgroundColor: 'black', borderColor: 'black', color: 'black', borderWidth: 3}}
+      buttonStyle={styles.buttonGroup}
       selectedButtonStyle={{backgroundColor: 'black'}}
-      selectedTextStyle={{color: 'whitesmoke', fontWeight: 'bold', fontSize: 15}}
+      selectedTextStyle={styles.textStyle}
       buttonContainerStyle={{borderColor: 'black', }}
       onPress={updateIndex}
       selectedIndex={activeButton}
@@ -140,7 +142,7 @@ export default function Favorites({navigation, route}) {
      
         <Button 
               title="ADD RECIPE "
-              buttonStyle={{marginTop: 20, backgroundColor: 'black', width: '70%', borderRadius: 15, borderWidth: 2, borderColor: 'black' }}
+              buttonStyle={styles.buttonStyle}
               onPress={() => navigation.navigate("AddRecipe")} 
               icon={
                 <Icon
@@ -160,8 +162,48 @@ export default function Favorites({navigation, route}) {
         reverseColor="red"
         onPress={() => signOut()}
       />
+
+      <Icon
+        name="update"
+        size={20}
+        color="black"
+        reverse
+        reverseColor="white"
+        onPress={() => getContents()}
+      />
+
       </View>
     }
   />
   );
 }
+
+const styles = StyleSheet.create({
+  items: {
+    backgroundColor: 'whitesmoke', 
+    width: '80%', 
+    alignSelf: 'center', 
+    padding: 8, 
+    borderRadius: 5, 
+    marginBottom: 2
+  },
+  buttonGroup: {
+    backgroundColor: 'black', 
+    borderColor: 'black', 
+    color: 'black', 
+    borderWidth: 3
+  },
+  textStyle: {
+    color: 'whitesmoke', 
+    fontWeight: 'bold', 
+    fontSize: 15
+  },
+  buttonStyle: {
+    marginTop: 20, 
+    backgroundColor: 'black', 
+    width: '70%', 
+    borderRadius: 15, 
+    borderWidth: 2, 
+    borderColor: 'black' 
+  }
+});

@@ -50,7 +50,6 @@ export default function DrinkResult({navigation, route}) {
      if(product == `strIngredient${b}`){
        if(data[product] != "" && data[product] != null && data[product] != " "){
         multiD.push([data[product]])
-         //multiD[b-1].push(data[product])
          b++;
        } 
      }
@@ -93,14 +92,15 @@ export default function DrinkResult({navigation, route}) {
       return multiD
    } */
 
+  // Liking recipe saves it to firebase
   const handleFavorite = () => {
+    // getting the id of current user
     let id =  firebase.auth().currentUser.uid
     let title = recipe.title
     if(like == "favorite-border"){
       console.log(recipe.title)
       setLike("favorite")
-      // save to firebase
-      
+     // this data obj will be saved in firebase
       let data = { ref: `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${recipe.title}`, title: recipe.title }
 
      firebase.firestore().collection('users').doc(id).collection('MyDrinks').doc(title).set(data)
@@ -108,26 +108,19 @@ export default function DrinkResult({navigation, route}) {
     else if(like == "favorite"){
       console.log("dislike")
       setLike("favorite-border")
-      // delete from firebase
-      // firebase.firestore().collection('users').doc(id).collection('MyDrinks').where("ref")
+      // delete from firebase can go here
     }
   }
 
   const renderI = ({ item }) => (
    
     <View>
-    <View style={{flex: 5, flexDirection: 'row',  backgroundColor: 'whitesmoke' , width: '80%', alignSelf: 'center'}}>
-      <Text style={{flex: 2,  textAlign: 'right' , fontWeight: 'bold'}}>{item[1]}</Text> 
+    <View style={styles.renderView1}>
+      <Text style={styles.amount}>{item[1]}</Text> 
       <Text>  |   </Text>
-      <Text style={{flex: 3, fontWeight: 'bold'}}>{item[0]}</Text> 
+      <Text style={styles.ingredient}>{item[0]}</Text> 
      </View>
-    <View 
-    style={{
-        height: 1,
-        width: "80%",
-        backgroundColor: 'black',
-        marginLeft: "10%"
-    }}/>
+    <View style={styles.separator}/>
     </View>
   
   ) 
@@ -145,12 +138,13 @@ export default function DrinkResult({navigation, route}) {
         onPress={handleFavorite}
       />
       </View>
-      <View style={{alignItems: 'center', backgroundColor: 'whitesmoke', marginBottom: 10, alignSelf: 'center', marginTop: 0, paddingLeft: 10, paddingRight: 10, 
-                    shadowColor: 'black', shadowOffset: {width: 2, height: 8}, shadowOpacity: 0.9, shadowRadius: 10.32, elevation: 16}}>
-       <Image source={{uri: recipe.avatarUrl}} PlaceholderContent={<ActivityIndicator color="red"/>} style={{ width: screenWidth*0.5, height: screenWidth*0.5, marginTop: 20, borderColor: 'grey', borderWidth: 0}}/>
-       <Text numberOfLines={2} style={{ fontSize: 20, marginBottom: 15, marginTop: 3, fontWeight: 'bold'}}>{recipe.title}</Text>
+      <View style={styles.card}>
+       <Image 
+          source={{uri: recipe.avatarUrl}} 
+          PlaceholderContent={<ActivityIndicator color="red"/>} 
+          style={{ width: screenWidth*0.5, height: screenWidth*0.5, marginTop: 20, borderColor: 'grey', borderWidth: 0}}/>
+       <Text numberOfLines={2} style={styles.title}>{recipe.title}</Text>
        </View>
-       {/* <Text style={{margin: 10, alignSelf: 'center', }}>Ingredients : </Text> */}
       </>}
       style={{backgroundColor: '#C94525'}}
       data={recipe.ingredients}
@@ -159,9 +153,59 @@ export default function DrinkResult({navigation, route}) {
       ListFooterComponent={
         <View style={{marginTop: 20}}>
         <Text style={{ alignSelf: 'center', fontSize: 20}}>Recipe</Text>
-        <Text numberOfLines={100} style={{ backgroundColor: '#CA5C40',  width: '80%', alignSelf: 'center'}}>{recipe.instructions}</Text>
+        <Text numberOfLines={100} style={styles.instruction}>{recipe.instructions}</Text>
         </View>
       }
     />
   )
 }
+
+const styles = StyleSheet.create({
+  renderView1: {
+    flex: 5, 
+    flexDirection: 'row',  
+    backgroundColor: 'whitesmoke' , 
+    width: '80%', 
+    alignSelf: 'center'
+  },
+  separator: {
+    height: 1,
+    width: "80%",
+    backgroundColor: 'black',
+    marginLeft: "10%"
+  },
+  amount: {
+    flex: 2,  
+    textAlign: 'right' , 
+    fontWeight: 'bold'
+  },
+  ingredient: {
+    flex: 3, 
+    fontWeight: 'bold'
+  },
+  card: {
+    alignItems: 'center', 
+    backgroundColor: 'whitesmoke', 
+    marginBottom: 10, 
+    alignSelf: 'center', 
+    marginTop: 0, 
+    paddingLeft: 10, 
+    paddingRight: 10, 
+    shadowColor: 'black', 
+    shadowOffset: {width: 2, height: 8}, 
+    shadowOpacity: 0.9, 
+    shadowRadius: 10.32, 
+    elevation: 16
+  },
+  title: {
+    fontSize: 20, 
+    marginBottom: 15, 
+    marginTop: 3, 
+    fontWeight: 'bold'
+  },
+  instruction: {
+    backgroundColor: '#C94525',  
+    width: '80%', 
+    alignSelf: 'center'
+  }
+});
