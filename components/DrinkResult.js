@@ -101,7 +101,7 @@ export default function DrinkResult({navigation, route}) {
       setLike("favorite")
       // save to firebase
       
-      let data = { ref: `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${recipe.title}` }
+      let data = { ref: `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${recipe.title}`, title: recipe.title }
 
      firebase.firestore().collection('users').doc(id).collection('MyDrinks').doc(title).set(data)
     }

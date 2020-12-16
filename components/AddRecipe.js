@@ -38,7 +38,7 @@ export default function AddRecipe({navigation, route}){
        let c =  firebase.auth().currentUser.uid
         console.log(c)
         let data = {
-            name: recipe.name,
+            title: recipe.name,
             instructions: recipe.instructions,
             ingredients: ingredients,
             amounts: amounts

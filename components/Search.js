@@ -18,7 +18,7 @@ export default function Search({navigation, route}) {
   }
 
   // Buttongroup buttons
-  const buttons = ['Dish', 'Ingredient']
+  const buttons = ['Dish', 'Ingredient'];
 
   // Dimensions to help with order of the page layout
   const screenWidth = Dimensions.get('window').width;
