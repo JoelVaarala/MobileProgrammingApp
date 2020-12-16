@@ -21,7 +21,7 @@ export default function Drink({navigation, route}) {
                      'http://clipart-library.com/images/pcqKknoc9.png'
                     }} 
         />
-        <Button title="ROLL" onPress={() => navigation.navigate("DrinkResult")} buttonStyle={{backgroundColor: 'black', marginTop: 20, marginLeft: 50, marginRight: 50}} />
+        <Button title="ROLL" onPress={() => navigation.navigate("DrinkResult", { drinkUrl : `https://www.thecocktaildb.com/api/json/v1/1/random.php` })} buttonStyle={{backgroundColor: 'black', marginTop: 20, marginLeft: 50, marginRight: 50}} />
      </View>
    </View>
   );

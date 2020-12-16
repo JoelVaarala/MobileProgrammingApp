@@ -26,7 +26,7 @@ export default function DrinkResult({navigation, route}) {
 
 
   const fetchRecipe = () => {
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/random.php`)
+    fetch(route.params.drinkUrl)
     .then((response) => response.json())
     .then((json) => {
         console.log(json.drinks[0].strDrink),

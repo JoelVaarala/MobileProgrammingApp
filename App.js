@@ -13,6 +13,7 @@ import AddRecipe from './components/AddRecipe';
 import Login from './components/Login';
 import Register from './components/Register';
 import Loading from './components/Loading';
+import MyRecipe from './components/MyRecipe';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from "@react-navigation/stack";
@@ -113,8 +114,8 @@ export default function App(props) {
        .signInWithEmailAndPassword(kayttaja, salasana)
        .catch(function (err) {
          error = err.code;
-         console.log(error);
-         console.log(err);
+         console.log('THIS erre', error);
+         console.log('no.2', err);
        });
        if (error === 'auth/user-not-found' || error === 'auth/wrong-password') {
         return 'Wrong email or password';
@@ -158,6 +159,9 @@ export default function App(props) {
       <ListStack.Navigator>
         <ListStack.Screen name="Favorites" component={Favorites} />
         <ListStack.Screen name="AddRecipe" component={AddRecipe} />
+        <ListStack.Screen name="Recipe" component={Recipe} />
+        <ListStack.Screen  name="DrinkResult" component={DrinkResult} />
+        <ListStack.Screen  name="MyRecipe" component={MyRecipe} />
       </ListStack.Navigator>
     )
   }

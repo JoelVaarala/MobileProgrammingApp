@@ -75,13 +75,25 @@ export default function Favorites({navigation, route}) {
    }
   }
 
+  const navi = (item) => {
+    if(activeButton == 0){
+      console.log('0 valittuna', item)
+      navigation.navigate("MyRecipe")
+    }else if(activeButton == 1){
+      navigation.navigate("Recipe", { dish : item })
+    }else if(activeButton == 2){
+      navigation.navigate("DrinkResult",  { drinkUrl :  `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${item}`})
+    }
+  }
+
   const buttons = ['MyRecipes', 'MyFavorited', 'MyDrinks'];
 
   const renderI = ({ item }) => (
    
     <TouchableOpacity 
       style={{backgroundColor: 'whitesmoke', width: '80%', alignSelf: 'center', padding: 8, borderRadius: 5, marginBottom: 2}}
-      onPress={() => console.log(item.ref)}
+      //onPress={() => console.log(item.ref)}
+      onPress={() => navi(item.title)}
     >
       <View style={{flexDirection: 'row'}}>
       <Text style={{fontSize: 16}}>
@@ -115,7 +127,6 @@ export default function Favorites({navigation, route}) {
       containerStyle={{height: 30, borderColor: 'black'}}
       />
     
-     
      <Text>   Results :  </Text>
      </View>
   
