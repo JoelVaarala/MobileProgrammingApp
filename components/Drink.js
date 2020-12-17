@@ -2,10 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, ActivityIndicator } from 'react-native';
 import { Button, Image } from 'react-native-elements';
+import { useKeepAwake } from 'expo-keep-awake';
 
 
 export default function Drink({navigation, route}) {
 
+  useKeepAwake();
   const screenWidth = Dimensions.get('window').width;
 
   return (
@@ -24,6 +26,7 @@ export default function Drink({navigation, route}) {
           onPress={() => navigation.navigate("DrinkResult", { drinkUrl : `https://www.thecocktaildb.com/api/json/v1/1/random.php` })} 
           buttonStyle={styles.button} 
         />
+      
      </View>
    </View>
   );

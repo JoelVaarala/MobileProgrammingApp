@@ -9,7 +9,6 @@ export default function Search({navigation, route}) {
   const [view, setView] = React.useState(true);
   const [activeButton, setActiveButton] = React.useState(0);
   const [text, setText] = React.useState('');
-  const [fetchResult, setFetchResult] = React.useState();
   const [res, setRes] = React.useState();
 
   // updates which button is selected from buttongroup

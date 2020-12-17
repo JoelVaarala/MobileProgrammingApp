@@ -5,14 +5,12 @@ import * as firebase from 'firebase';
 import { AuthContext } from '../AuthContext';
 
 
-export default function Login({navigation, route} , props) {
+export default function Login({navigation, route}) {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState(null);
-  const [user, setUser] = React.useState("");
   const { signIn } = React.useContext(AuthContext);
-
 
   return (
     <View style={styles.container}>

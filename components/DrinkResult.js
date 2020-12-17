@@ -5,7 +5,7 @@ import {Avatar, Button, Tooltip, ListItem, Image, Icon} from 'react-native-eleme
 import ReadMore from 'react-native-read-more-text';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
+import { store } from "../redux/index";
 
 export default function DrinkResult({navigation, route}) {
 
@@ -19,6 +19,8 @@ export default function DrinkResult({navigation, route}) {
   });
   const [recipeObj, setRecipeObj] = React.useState();
   const [like, setLike] = React.useState("favorite-border");
+  let id = store.getState().UserDataReducer[0].id;
+
 
   React.useEffect(() => {
     fetchRecipe();
@@ -95,7 +97,6 @@ export default function DrinkResult({navigation, route}) {
   // Liking recipe saves it to firebase
   const handleFavorite = () => {
     // getting the id of current user
-    let id =  firebase.auth().currentUser.uid
     let title = recipe.title
     if(like == "favorite-border"){
       console.log(recipe.title)
@@ -151,7 +152,7 @@ export default function DrinkResult({navigation, route}) {
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderI}
       ListFooterComponent={
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: 20, marginBottom: 20}}>
         <Text style={{ alignSelf: 'center', fontSize: 20}}>Recipe</Text>
         <Text numberOfLines={100} style={styles.instruction}>{recipe.instructions}</Text>
         </View>

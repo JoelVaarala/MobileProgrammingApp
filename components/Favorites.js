@@ -5,7 +5,7 @@ import { Button, Icon, ButtonGroup } from 'react-native-elements';
 import { AuthContext } from '../AuthContext';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
+import { store } from "../redux/index";
 
 export default function Favorites({navigation, route}) {
 
@@ -15,10 +15,12 @@ export default function Favorites({navigation, route}) {
   const [activeButton, setActiveButton] = React.useState();
   const [list, setList] = React.useState([]);
   
+  let id = store.getState().UserDataReducer[0].id;
+
   const { signOut } = React.useContext(AuthContext);
 
   React.useEffect(() => {
-    getContents();
+   getContents();
   }, []);
 
   // fetch saved recipes from firebase
@@ -26,7 +28,6 @@ export default function Favorites({navigation, route}) {
     var drink = [];
     var ownRecipe = [];
     var likedRecipe = [];
-    let id =  firebase.auth().currentUser.uid;
 
     firebase.firestore()
     .collection('users')
@@ -80,7 +81,6 @@ export default function Favorites({navigation, route}) {
   // selects where to navigate depending whhat category is selected
   const navi = (item) => {
     if(activeButton == 0){
-      console.log('0 valittuna', item)
       navigation.navigate("MyRecipe", {recipeItem: item})
     }else if(activeButton == 1){
       navigation.navigate("Recipe", { dish : item })
@@ -116,8 +116,8 @@ export default function Favorites({navigation, route}) {
    
   <FlatList ListHeaderComponent={
     <>
-    <View style={{}}>
-      <Text style={{marginTop: 10, marginBottom: 30}}></Text>
+    <View>
+    <Text style={{fontWeight: 'bold', marginBottom: 10, marginTop: 40}}>   Choose which category , Results appear below. </Text>
       <ButtonGroup
       buttonStyle={styles.buttonGroup}
       selectedButtonStyle={{backgroundColor: 'black'}}
@@ -129,7 +129,6 @@ export default function Favorites({navigation, route}) {
       containerStyle={{height: 30, borderColor: 'black'}}
       />
     
-     <Text>   Results :  </Text>
      </View>
   
     </>}
@@ -201,9 +200,10 @@ const styles = StyleSheet.create({
   buttonStyle: {
     marginTop: 20, 
     backgroundColor: 'black', 
-    width: '70%', 
+    width: '50%', 
     borderRadius: 15, 
     borderWidth: 2, 
-    borderColor: 'black' 
+    borderColor: 'black',
+    
   }
 });

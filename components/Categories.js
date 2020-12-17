@@ -2,9 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { connect } from "react-redux";
+import { store, addUid } from "../redux/index";
+import * as firebase from 'firebase';
+import 'firebase/firestore';
 
 
-export default function Categories({navigation, route}) {
+function Categories({navigation, route}) {
 
   const [categories, setCategories] = React.useState([]);
 
@@ -16,8 +20,13 @@ export default function Categories({navigation, route}) {
 
   React.useEffect(() => {
     fetchCategories();
+    saveID();
   }, []);
 
+  const saveID = () => {
+      let id = firebase.auth().currentUser.uid
+      store.dispatch(addUid(id))
+  }
 
   // fetch categories from api
   const fetchCategories = () => {
@@ -54,6 +63,14 @@ export default function Categories({navigation, route}) {
     </View>
   );
 }
+
+const mapStateToProps = (state) => ({
+  UserDataReducer: state.UserDataReducer,
+});
+// Component connects to reducer and receives params state, action and main function
+const Categ = connect(mapStateToProps, { addUid })(Categories);
+// Export default const above instead of "main function"
+export default Categ;
 
 const styles = StyleSheet.create({
   container: {

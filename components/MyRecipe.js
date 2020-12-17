@@ -4,12 +4,14 @@ import { View, Text, FlatList, StyleSheet} from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
+import { store } from "../redux/index";
 
 export default function MyRecipe({navigation, route}){
 
     const [title, setTitle] = React.useState("");
     const [instructions, setInstructions] = React.useState("");
     const [aineet, setAineet] = React.useState([]);
+    let id = store.getState().UserDataReducer[0].id;
 
     React.useEffect(() => {
         retvieveRecipe();
@@ -18,7 +20,6 @@ export default function MyRecipe({navigation, route}){
     // getting the specific recipe from firebase, 
     const retvieveRecipe = async () => {
         let multiD = [];
-        let id = firebase.auth().currentUser.uid;
         let rec = await firebase.firestore().collection('users').doc(id).collection('MyRecipes').doc(route.params.recipeItem).get()
         setTitle(rec.data().title)
         setInstructions(rec.data().instructions)

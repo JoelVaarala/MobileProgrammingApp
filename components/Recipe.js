@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Dimensions, FlatList, ActivityIndicator } from 
 import {Image, Icon} from 'react-native-elements';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
+import { store } from "../redux/index";
 
 
 export default function Recipe({navigation, route}) {
@@ -20,6 +20,8 @@ export default function Recipe({navigation, route}) {
   const [recipeObj, setRecipeObj] = React.useState();
   const [dataFetched, setDataFetched] = React.useState(false);
   const [like, setLike] = React.useState("favorite-border");
+
+  let id = store.getState().UserDataReducer[0].id;
 
   React.useEffect(() => {
     fetchRecipe();
@@ -83,7 +85,6 @@ export default function Recipe({navigation, route}) {
   )
 
   const handleFavorite = () => {
-    let id =  firebase.auth().currentUser.uid
     let title = recipe.title
     if(like == "favorite-border"){
       setLike("favorite")
@@ -129,7 +130,7 @@ export default function Recipe({navigation, route}) {
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderI}
       ListFooterComponent={
-        <View>
+        <View style={{marginBottom: 20}}>
         <Text style={styles.recipe}>Recipe</Text>
         <Text numberOfLines={100} style={styles.instruction}>{recipe.instructions}</Text>
         </View>

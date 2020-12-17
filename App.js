@@ -1,7 +1,10 @@
 import "react-native-gesture-handler";
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, Alert } from 'react-native';
+import { Provider } from "react-redux";
+import { store } from "./redux/index";
+import FlashMessage from "react-native-flash-message";
 import Categories from './components/Categories';
 import Recipe from './components/Recipe';
 import Search from './components/Search';
@@ -62,7 +65,7 @@ export default function App(props) {
        signIn: async (email, password) => {
          setNavigationChange({ loading: true, loggedIn: false });
          let loginResponse = await login(email, password);
-         if (loginResponse === 'auth/user-not-found' || loginResponse === 'auth/wrong-password') {
+         if (loginResponse === 'Wrong email or password') {
            Alert.alert('Wrong email or password');
            setNavigationChange({ loading: false, loggedIn: false });
          } else if (loginResponse === 'Success') {
@@ -94,18 +97,19 @@ export default function App(props) {
      }
    };
  
-   const login = async (kayttaja, salasana) => {
+   const login = async (email, password) => {
      let error;
      let userprom = await firebase
        .auth()
-       .signInWithEmailAndPassword(kayttaja, salasana)
+       .signInWithEmailAndPassword(email, password)
        .catch(function (err) {
          error = err.code;
          console.log(error);
        });
-       if (error === 'auth/user-not-found' || error === 'auth/wrong-password') {
+       if (error === 'auth/user-not-found' || error === 'auth/wrong-password' || error === 'auth/invalid-email') {
         return 'Wrong email or password';
     }
+    //console.log("user promise : " , userprom);
     return 'Success';
    }; 
 
@@ -153,7 +157,7 @@ export default function App(props) {
 
   const AppStack = () => {
   return (
- 
+      <Provider store={store}>
       <AuthContext.Provider value={authContext}>
       <NavigationContainer>
       {navigationChange.loggedIn ? (
@@ -213,8 +217,9 @@ export default function App(props) {
       )}
          <StatusBar style="light"/>   
       </NavigationContainer>
+      <FlashMessage position="top" />
     </AuthContext.Provider>
-   
+    </Provider>
     );
   }
       return<>{navigationChange.loading ? <Loading /> : <AppStack /> }</>   
